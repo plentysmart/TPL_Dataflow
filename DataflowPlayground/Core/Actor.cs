@@ -13,13 +13,11 @@ namespace Core
 
         private ActionBlock<Message> executor;
 
-        public Actor()
+        protected Actor()
         {
-
             executor = new ActionBlock<Message>(
                 (message) => _handlers[message.GetType()](message));
         }
-
 
         public void Post<T>(T message) where T : Message
         {
@@ -30,6 +28,5 @@ namespace Core
         {
             _handlers.Add(typeof(T), o => @do((T)o));
         }
-        
     }
 }

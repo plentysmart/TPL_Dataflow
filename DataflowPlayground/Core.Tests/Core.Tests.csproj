@@ -49,6 +49,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActorsFactoryTests.cs" />
+    <Compile Include="ActorsPlayground.cs" />
     <Compile Include="ActorTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
