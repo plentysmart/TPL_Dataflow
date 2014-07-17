@@ -14,10 +14,9 @@ namespace Core
 {
     public class ActorsFactory
     {
-        public static T Create<T>() where T:IActor
+               public static T Create<T>() where T:IActor
         {
-            var implementation = Assembly.GetCallingAssembly().GetTypes().Where(x => x.GetInterfaces().Any(i => i == typeof (T))).Single();
-            return (T)new DynamicWrapper<T>( implementation).GetTransparentProxy();
+          ProxyGenerator 
         }
 
         private class DynamicWrapper<T> : RealProxy
