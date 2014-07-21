@@ -41,7 +41,6 @@ namespace DataflowPlayground.Blocks
                
             }
             Assert.Equal(1, processedValues.Count); // Only first message processed
-            Assert.Throws<AggregateException>(() => divideBlock.Completion.Wait());
             Assert.True(divideBlock.Completion.IsFaulted);
         }
 
@@ -73,7 +72,6 @@ namespace DataflowPlayground.Blocks
                     Debug.WriteLine(value);  
             }
             Assert.False(divideBlock.Post(2));
-            Assert.Throws<AggregateException>(() => divideBlock.Completion.Wait());
         }
 
         [Fact]
@@ -111,7 +109,6 @@ namespace DataflowPlayground.Blocks
                         Debug.WriteLine(value.Output);
                     }
             }
-            Assert.DoesNotThrow(() => divideBlock.Completion.Wait());
 
             Assert.Equal(3, sucessfull);
             Assert.Equal(1, failed);
