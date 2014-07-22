@@ -82,12 +82,10 @@ namespace DataflowPlayground.Blocks
 
         private static async Task ExceptionHandlig_FirstApproachSyncWrapper()
         {
-            var processedValues = new List<int>();
             Func<int, MessageOut<int, int>> transform = (x) =>
             {
                 if (x%2 != 0)
                     return new MessageOut<int, int>(x, new ArgumentException("This block can process only even numbers"));
-                processedValues.Add(x);
                 return new MessageOut<int, int>(x, x/2);
             };
 
@@ -131,12 +129,12 @@ namespace DataflowPlayground.Blocks
                 private set { _output = value; }
             }
 
-
             public MessageOut(TIn input,TOut output)
             {
                 Input = input;
                 Output = output;
             }
+
             public MessageOut(TIn input, Exception exception)
             {
                 _exception = exception;

@@ -58,6 +58,7 @@
     <Compile Include="Blocks\ExceptionHandling.cs" />
     <Compile Include="Blocks\TransformBlock.cs" />
     <Compile Include="Blocks\TransformManyBlock.cs" />
+    <Compile Include="Pipes\BasicExamples.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
