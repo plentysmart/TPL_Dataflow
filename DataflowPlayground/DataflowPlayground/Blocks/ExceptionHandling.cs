@@ -28,7 +28,7 @@ namespace DataflowPlayground.Blocks
             Assert.True(divideBlock.Post(6));
             divideBlock.Complete();
 
-            while (await divideBlock.OutputAvailableAsync())
+            while (divideBlock.OutputAvailableAsync().GetAwaiter().GetResult())
             {
 
                 var value = divideBlock.Receive();
