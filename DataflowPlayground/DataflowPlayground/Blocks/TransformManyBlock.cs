@@ -11,16 +11,11 @@ namespace DataflowPlayground.Blocks
     public class TransformManyBlock
     {
         [Fact]
-        public  void Basic_Async()
+        public  async Task Basic_Async()
         {
-            // Xunit runner does not wait for async code;
-            Basic_AsyncWrapper().Wait();
-        }
 
-        private static async Task Basic_AsyncWrapper()
-        {
             var deArrayBlock = new TransformManyBlock<int[], int>(x => x.AsEnumerable());
-            deArrayBlock.Post(new[] {1, 2, 3, 4, 5});
+            deArrayBlock.Post(new[] { 1, 2, 3, 4, 5 });
             deArrayBlock.Complete();
             var itemsReceived = 0;
             while (await deArrayBlock.OutputAvailableAsync())

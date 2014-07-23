@@ -13,20 +13,15 @@ namespace DataflowPlayground.Blocks
     public class ExceptionHandling
     {
         [Fact]
-        public void BasicExample()
-        {
-            BasicExampleAsyncWrapper().Wait();
-        }
-
-        private static async Task BasicExampleAsyncWrapper()
+        public async Task BasicExample()
         {
             var processedValues = new List<int>();
             var divideBlock = new TransformBlock<int, int>((x) =>
             {
-                if (x%2 != 0)
+                if (x % 2 != 0)
                     throw new ArgumentException("This block can process only even numbers");
                 processedValues.Add(x);
-                return x/2;
+                return x / 2;
             });
             Assert.True(divideBlock.Post(2));
             Assert.True(divideBlock.Post(3));
@@ -35,24 +30,19 @@ namespace DataflowPlayground.Blocks
 
             while (await divideBlock.OutputAvailableAsync())
             {
-              
-                    var value = divideBlock.Receive();
-                    Debug.WriteLine(value);
-               
+
+                var value = divideBlock.Receive();
+                Debug.WriteLine(value);
+
             }
             Assert.Equal(1, processedValues.Count); // Only first message processed
             Assert.True(divideBlock.Completion.IsFaulted);
         }
 
         [Fact]
-        public void Keep_posting_to_failed_block()
+        public async Task Keep_posting_to_failed_block()
         {
-            KeepPostingAsyncWrapper().Wait();
-        }
-
-        private static async Task KeepPostingAsyncWrapper(ExecutionDataflowBlockOptions options = null)
-        {
-            var processedValues = new List<int>();
+                    var processedValues = new List<int>();
             Func<int, int> transform = (x) =>
             {
                 if (x%2 != 0)
@@ -61,9 +51,7 @@ namespace DataflowPlayground.Blocks
                 return x/2;
             };
 
-            var divideBlock = options != null
-                ? new TransformBlock<int, int>(transform, options)
-                : new TransformBlock<int, int>(transform);
+            var divideBlock = new TransformBlock<int, int>(transform);
             Assert.True(divideBlock.Post(2));
             Assert.True(divideBlock.Post(3));
             while (await divideBlock.OutputAvailableAsync())
@@ -74,19 +62,15 @@ namespace DataflowPlayground.Blocks
             Assert.False(divideBlock.Post(2));
         }
 
-        [Fact]
-        public void ExceptionHandlig_FirstApproach()
-        {
-            ExceptionHandlig_FirstApproachSyncWrapper().Wait();
-        }
 
-        private static async Task ExceptionHandlig_FirstApproachSyncWrapper()
+        [Fact]
+        public async Task ExceptionHandlig_FirstApproach()
         {
             Func<int, MessageOut<int, int>> transform = (x) =>
             {
-                if (x%2 != 0)
+                if (x % 2 != 0)
                     return new MessageOut<int, int>(x, new ArgumentException("This block can process only even numbers"));
-                return new MessageOut<int, int>(x, x/2);
+                return new MessageOut<int, int>(x, x / 2);
             };
 
             var divideBlock = new TransformBlock<int, MessageOut<int, int>>(transform);
@@ -99,13 +83,13 @@ namespace DataflowPlayground.Blocks
             var failed = 0;
             while (await divideBlock.OutputAvailableAsync())
             {
-                    var value = divideBlock.Receive();
-                    if (value.IsFaulted) failed++;
-                    else
-                    {
-                        sucessfull++;
-                        Debug.WriteLine(value.Output);
-                    }
+                var value = divideBlock.Receive();
+                if (value.IsFaulted) failed++;
+                else
+                {
+                    sucessfull++;
+                    Debug.WriteLine(value.Output);
+                }
             }
 
             Assert.Equal(3, sucessfull);

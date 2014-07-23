@@ -35,15 +35,9 @@ namespace DataflowPlayground.Blocks
         }
 
         [Fact]
-        public void Basic_TryReceive()
+        public async Task Basic_TryReceive()
         {
-            // Xunit runner does not wait for async code;
-            Basic_TryReceiveWrapper().Wait();
-        }
-
-        private static async Task Basic_TryReceiveWrapper()
-        {
-            var transformationBlock = new TransformBlock<int, int>((x) => Task.FromResult(x*x));
+            var transformationBlock = new TransformBlock<int, int>((x) => Task.FromResult(x * x));
             transformationBlock.Post(5);
             transformationBlock.Post(10);
             transformationBlock.Post(20);
@@ -59,7 +53,7 @@ namespace DataflowPlayground.Blocks
                     itemsReceived++;
                 }
             }
-            Assert.Equal(3,itemsReceived);
+            Assert.Equal(3, itemsReceived);
         }
     }
 }
